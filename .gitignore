@@ -1,0 +1,8 @@
+# Local tooling, not part of the site
+.claude/
+.agents/
+skills-lock.json
+
+# OS / editor
+.DS_Store
+Thumbs.db

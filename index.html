@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>styledbyira | Shop the Look</title>
+  <meta name="description" content="Every outfit from @styledbyira on TikTok and Instagram, with links to shop each piece." />
+  <meta property="og:title" content="styledbyira | Shop the Look" />
+  <meta property="og:description" content="Shop every outfit, bag, and accessory from Ira's videos." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#c2295a" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='32' fill='%23c2295a'/%3E%3Ctext x='32' y='44' text-anchor='middle' font-family='Arial,Helvetica,sans-serif' font-weight='700' font-size='36' fill='%23fff'%3Ei%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Top bar: brand + social buttons. Single line, 64px. -->
+  <header class="topbar">
+    <div class="container topbar__inner">
+      <a class="brand" href="#top" id="brand">styledbyira</a>
+      <nav class="socials socials--bar" id="socialsBar" aria-label="Social links"></nav>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- Hero: asymmetric split. Left copy, right portrait. Collapses to single column under 768px. -->
+    <section class="hero">
+      <div class="container hero__grid">
+        <div class="hero__copy reveal">
+          <h1 class="hero__title" id="headline">Every outfit from my videos, ready to shop.</h1>
+          <p class="hero__sub" id="intro">Affordable Amazon finds and everyday pieces, linked exactly where you saw them.</p>
+          <div class="hero__actions">
+            <a class="btn btn--primary" href="#looks">Shop the looks</a>
+            <a class="btn btn--ghost" href="#products">Browse all products</a>
+          </div>
+        </div>
+        <figure class="hero__media reveal reveal--late">
+          <img id="heroPhoto" src="" alt="Ira wearing one of her featured outfits" width="900" height="1125" loading="eager" fetchpriority="high" />
+        </figure>
+      </div>
+    </section>
+
+    <!-- Looks: filter chips + card grid. Each card opens the video plus its products. -->
+    <section class="section" id="looks">
+      <div class="container">
+        <div class="section__head">
+          <h2 class="section__title">Shop the looks</h2>
+          <p class="section__sub">Tap an outfit to watch the video and shop every piece in it.</p>
+        </div>
+
+        <div class="toolbar">
+          <div class="chips" id="chips" role="group" aria-label="Filter by category"></div>
+          <label class="search">
+            <span class="icon icon--search" aria-hidden="true"></span>
+            <input type="search" id="search" placeholder="Search dresses, bags, shoes" aria-label="Search looks and products" />
+          </label>
+        </div>
+
+        <div class="looks" id="looksGrid" aria-live="polite"></div>
+        <div class="empty" id="looksEmpty" hidden>
+          <p class="empty__title">Nothing here yet</p>
+          <p class="empty__sub">Try a different word or clear the filter.</p>
+          <button class="btn btn--ghost" type="button" id="clearFilters">Clear filters</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- All products: compact tile grid. Different layout family from the looks grid. -->
+    <section class="section section--tint" id="products">
+      <div class="container">
+        <div class="section__head">
+          <h2 class="section__title">All products</h2>
+          <p class="section__sub">Everything I have linked so far, in one place.</p>
+        </div>
+        <div class="products" id="productsGrid"></div>
+      </div>
+    </section>
+
+    <!-- About + disclosure: plain stacked text, no card. -->
+    <section class="section about">
+      <div class="container about__inner">
+        <h2 class="section__title">Hi, I'm Ira</h2>
+        <p id="aboutText">I share affordable, wearable outfits, mostly from Amazon, on TikTok and Instagram. This page is where every piece lives so you never have to dig through comments for a link.</p>
+        <p class="disclosure" id="disclosure">As an Amazon Associate I earn from qualifying purchases. Some links on this page are affiliate links, which means I may earn a small commission at no extra cost to you.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <span class="footer__copy">© <span id="year"></span> <span id="footerName">styledbyira</span></span>
+      <nav class="socials socials--footer" id="socialsFooter" aria-label="Social links"></nav>
+    </div>
+  </footer>
+
+  <!-- Look modal: video embed on one side, product list on the other. -->
+  <div class="modal" id="modal" hidden>
+    <div class="modal__backdrop" data-close></div>
+    <div class="modal__panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="modal__close" type="button" data-close aria-label="Close">
+        <span class="icon icon--close" aria-hidden="true"></span>
+      </button>
+      <div class="modal__video">
+        <div class="modal__tabs" id="modalTabs" role="tablist" aria-label="Watch on"></div>
+        <div class="modal__frame" id="modalFrame"></div>
+      </div>
+      <div class="modal__body">
+        <h3 class="modal__title" id="modalTitle"></h3>
+        <p class="modal__meta" id="modalMeta"></p>
+        <div class="modal__products" id="modalProducts"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="data/looks.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
