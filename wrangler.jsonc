@@ -1,0 +1,9 @@
+{
+  // Cloudflare Workers static-assets deployment for the styledbyira site.
+  "name": "styledbyira",
+  "compatibility_date": "2026-09-01",
+  "build": { "command": "node build.mjs" },
+  "assets": { "directory": "./dist" }
+  // After choosing the domain, add (the domain must be a zone on this Cloudflare account):
+  // "routes": [{ "pattern": "example.com", "custom_domain": true }]
+}

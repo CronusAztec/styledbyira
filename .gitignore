@@ -6,3 +6,6 @@ skills-lock.json
 # OS / editor
 .DS_Store
 Thumbs.db
+.wrangler/
+node_modules/
+dist/

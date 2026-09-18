@@ -55,6 +55,17 @@ then visit http://localhost:8080.
 
 Point a custom domain (e.g. styledbyira.com) at the host and put that URL in the TikTok and Instagram bios.
 
+## Deploy to Cloudflare (custom domain)
+
+The repo includes `wrangler.jsonc` and `build.mjs`. The build copies only the public site files into `dist/` and Cloudflare serves that folder.
+
+1. Sign in once: `npx wrangler login` (opens a browser, click Allow).
+2. In `wrangler.jsonc`, add your domain. It must already be a site (zone) on the same Cloudflare account:
+   `"routes": [{ "pattern": "yourdomain.com", "custom_domain": true }]`
+3. Deploy: `npx wrangler deploy`. Cloudflare creates the DNS record and certificate for the domain automatically.
+
+Run step 3 again after any content change.
+
 ## Notes
 
 - The disclosure at the bottom of the page is required by Amazon Associates. Keep it.
