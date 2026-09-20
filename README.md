@@ -14,8 +14,9 @@ No build step, no framework. Plain HTML, CSS and JavaScript, so it can be hosted
 | `index.html` | Page structure. |
 | `styles.css` | Design (light and dark mode follow the phone's setting). |
 | `app.js` | Renders the page from the data file, handles filters, search and the video modal. |
-| `assets/ira.jpg` | Her portrait for the top of the page (add this file, portrait orientation, at least 900 x 1125). |
-| `assets/looks/` | Outfit photos or video screenshots, one per look. |
+| `assets/hero.jpg` | The photo at the top of the page (portrait, roughly 5:7, at least 900px wide). |
+| `assets/looks/` | One vertical 9:16 cover per look (720 x 1280), the same shape as the video. |
+| `assets/products/` | Optional square product photos. Products without one show a category icon. |
 
 ## Adding a new video
 
@@ -23,13 +24,13 @@ No build step, no framework. Plain HTML, CSS and JavaScript, so it can be hosted
 2. Copy one of the look objects and paste it at the top of the `looks` list.
 3. Fill in:
    - `id`: anything unique, e.g. `look-007`. The page URL `#look-007` opens that look directly, handy for captions.
-   - `title` and `date` (`YYYY-MM-DD`).
-   - `image`: path to a photo in `assets/looks/`, e.g. `"assets/looks/look-007.jpg"`.
+   - `title`, and optionally `date` (`YYYY-MM-DD`).
+   - `image`: path to a 9:16 cover in `assets/looks/`, e.g. `"assets/looks/look-007.jpg"`.
    - `video`: full links to the TikTok, Instagram Reel and/or YouTube video. Leave out any platform she did not post on. The site embeds the video from the link automatically.
    - `products`: one line per item. `url` is the Amazon Associates link. A plain `amazon.com/dp/...` link works too because the site appends your `amazonTag`. Non-Amazon stores work as well; the button label picks up the store name.
 4. Save and refresh.
 
-The **All products** section and the category filter chips build themselves from the looks.
+The **All products** directory (grouped by category) and the filter chips build themselves from the looks. A look without a `video` still works: its card opens the photo and the product list, and the play badge appears once a link is added.
 
 ## Socials
 
@@ -70,4 +71,4 @@ Run step 3 again after any content change.
 
 - The disclosure at the bottom of the page is required by Amazon Associates. Keep it.
 - Instagram embeds require the post to be public. TikTok embeds work for public videos.
-- The sample looks in `data/looks.js` use placeholder photos and made-up video ids so you can see the layout. Replace them with real ones.
+- The three looks in `data/looks.js` are the outfits from the outfit-swipe video. Their product links are Amazon search links as stand-ins: replace each with the real Associates link, and add the `video` links once the video is posted.

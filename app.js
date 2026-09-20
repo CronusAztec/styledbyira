@@ -87,9 +87,9 @@
   if (SITE.about) $("#aboutText").textContent = SITE.about;
   if (SITE.disclosure) $("#disclosure").textContent = SITE.disclosure;
 
+  // The hero photo is set in index.html so it loads early. Only swap it if the data file points elsewhere.
   const heroPhoto = $("#heroPhoto");
-  heroPhoto.onerror = () => { heroPhoto.onerror = null; heroPhoto.src = "https://picsum.photos/seed/styledbyira-portrait/900/1125"; };
-  heroPhoto.src = SITE.photo || "";
+  if (SITE.photo && heroPhoto.getAttribute("src") !== SITE.photo) heroPhoto.src = SITE.photo;
 
   /* ---------- Social buttons ---------- */
   function renderSocials(container) {
@@ -142,17 +142,22 @@
   function lookCard(look) {
     const card = el("button", "look");
     card.type = "button";
-    card.setAttribute("aria-label", `${look.title}: watch the video and shop the pieces`);
+    card.setAttribute("aria-label", `${look.title}: shop the pieces`);
 
     const media = el("div", "look__media");
     const img = el("img");
-    img.src = look.image || `https://picsum.photos/seed/${look.id}/800/1000`;
     img.alt = look.title;
     img.loading = "lazy";
-    img.width = 800; img.height = 1000;
-    const play = el("span", "look__play");
-    play.append(icon("player-play"));
-    media.append(img, play);
+    img.width = 720; img.height = 1280;
+    img.addEventListener("load", () => media.classList.add("is-loaded"), { once: true });
+    img.src = look.image || "";
+    if (img.complete && img.naturalWidth) media.classList.add("is-loaded");
+    media.append(img);
+    if (platformsOf(look).length) {          // play badge only when there is a video to watch
+      const play = el("span", "look__play");
+      play.append(icon("player-play"));
+      media.append(play);
+    }
 
     const body = el("div", "look__body");
     const count = (look.products || []).length;
@@ -193,11 +198,12 @@
     return t;
   }
 
-  function shopButton(p, small) {
+  function shopButton(p, small, short) {
     const a = el("a", "btn btn--primary" + (small ? " btn--sm" : ""));
     a.href = shopUrl(p.url);
     a.target = "_blank"; a.rel = "noopener sponsored";
-    a.textContent = `Shop on ${storeName(p)}`;
+    a.textContent = short ? "Shop" : `Shop on ${storeName(p)}`;
+    if (short) a.setAttribute("aria-label", `Shop ${p.name} on ${storeName(p)}`);
     return a;
   }
 
@@ -211,22 +217,32 @@
       items.push({ p, look });
     }));
 
-    $("#productsGrid").replaceChildren(...items.map(({ p, look }) => {
-      const card = el("article", "product");
-      const body = el("div", "product__body");
-      const from = el("button", "product__from", `Seen in: ${look.title}`);
-      from.type = "button";
-      from.addEventListener("click", () => openLook(look));
-      body.append(
-        el("div", "product__name", p.name),
-        el("div", "product__price", [p.price, p.category].filter(Boolean).join(" · ")),
-        from,
-        shopButton(p, true)
-      );
-      card.append(productThumb(p, "product__media"), body);
-      return card;
+    // Group by category, in the order set in SITE.categories.
+    const groups = categories.filter(c => c !== "All")
+      .map(c => ({ name: c, items: items.filter(i => i.p.category === c) }))
+      .filter(g => g.items.length);
+    const other = items.filter(i => !i.p.category);
+    if (other.length) groups.push({ name: "More", items: other });
+
+    $("#productsGrid").replaceChildren(...groups.map(g => {
+      const group = el("section", "group");
+      const list = el("div", "group__list");
+      list.append(...g.items.map(({ p, look }) => {
+        const row = el("div", "entry");
+        const info = el("div", "entry__info");
+        const from = el("button", "entry__from", look.title);
+        from.type = "button";
+        from.setAttribute("aria-label", `Seen in: ${look.title}`);
+        from.addEventListener("click", () => openLook(look));
+        info.append(el("div", "entry__name", p.name), from);
+        if (p.price) info.append(el("div", "entry__price", `${p.price} on ${storeName(p)}`));
+        row.append(productThumb(p, "entry__thumb"), info, shopButton(p, true, true));
+        return row;
+      }));
+      group.append(el("h3", "group__title", g.name), list);
+      return group;
     }));
-    $("#productsGrid").querySelectorAll(".product").forEach(observe);
+    $("#productsGrid").querySelectorAll(".group").forEach(observe);
   }
   renderProducts();
 
@@ -244,7 +260,7 @@
       a.textContent = `Watch on ${PLATFORM_LABEL[platform]}`;
       fb.append(el("p", null, "This video opens in the app."), a);
     } else {
-      fb.append(el("p", null, "No video linked for this look yet."));
+      fb.append(el("p", null, "Video coming soon."));
     }
     return fb;
   }
